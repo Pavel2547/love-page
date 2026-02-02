@@ -1,0 +1,275 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>HBD love</title>
+
+<link rel="stylesheet" href="file/default.css">
+
+<script src="file/jquery.min.js"></script>
+<script src="file/jscex.min.js"></script>
+<script src="file/jscex-parser.js"></script>
+<script src="file/jscex-jit.js"></script>
+<script src="file/jscex-builderbase.min.js"></script>
+<script src="file/jscex-async.min.js"></script>
+<script src="file/jscex-async-powerpack.min.js"></script>
+<script src="file/function.js"></script>
+<script src="file/love.js"></script>
+
+<style>
+#main { position: relative; }
+
+.edge-img {
+    position: absolute;
+    width: 80px;
+    height: 120px;
+    opacity: 0;
+    transform: scale(0.3);
+    transition: 
+        opacity 1.5s ease,
+        transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    z-index: 9000;
+    border-radius: 8px;
+}
+
+#imgBtn {
+    display: none;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 16px;
+    cursor: pointer;
+    z-index: 10000;
+}
+</style>
+</head>
+
+<body>
+<div id="main">
+
+<audio id="myAudio">
+    <source src="aud.mp3" type="audio/mp3">
+</audio>
+
+<div id="wrap">
+    <div id="text">
+        <div id="code">
+            <span class="say">Heyyyy my LOVE 💞</span><br>
+            <span class="say">Hope you're doing good 🎈</span><br>
+            <span class="say">Today is the 4th of February📅</span><br>
+            <span class="say">And you know what that means</span><br>
+            <span class="say">It's your BIRTHDAY 🎂</span><br>
+            <span class="say">Happy Birthday to you my Love 🎊</span><br>
+            <span class="say">You are such an amazing and beutiful queen👑</span><br>
+            <span class="say">Lets not forget funny😂 </span><br>
+            <span class="say">Maybe one day you'll be as funny as me😂</span><br>
+            <span class="say">Anyways,Thank you for being there for me</span><br>
+            <span class="say">And loving me ❤️😘</span><br>
+            <span class="say">May you continue ageing gracefully</span><br>
+            <span class="say">HAPPY BIRTHDAY LESLIE 🎉</span><br>
+        </div>
+    </div>
+
+    <canvas id="canvas" width="1100" height="680"></canvas>
+</div>
+
+<button id="imgBtn">💖 Surprise</button>
+</div>
+<div id="birthdayText" style="display:none;">
+    🎉 HAPPY BIRTHDAY LESLIE 🎉
+</div>
+
+
+<script>
+(function () {
+
+/* ================= AUDIO ================= */
+function playAudio() {
+    var audio = document.getElementById("myAudio");
+    if (audio.paused) audio.play();
+}
+
+/* ================= TREE ================= */
+
+var canvas = $('#canvas');
+var width = canvas.width();
+var height = canvas.height();
+
+var opts = {
+    seed: { x: width / 2 - 20, color: "rgb(190,26,37)", scale: 2 },
+    branch: [
+      [535,680,570,250,500,200,30,100,[
+        [540,500,455,417,340,400,13,100],
+        [550,445,600,356,680,345,12,100],
+        [546,397,413,247,328,244,9,80],
+        [546,357,608,252,678,221,6,100]
+      ]]
+    ],
+    bloom: { num: 700, width: 1080, height: 650 },
+    footer: { width: 1200, height: 5, speed: 10 }
+};
+
+var tree = new Tree(canvas[0], width, height, opts);
+var seed = tree.seed;
+var foot = tree.footer;
+var hold = 1;
+
+canvas.click(function(e){
+    playAudio();
+    var o = canvas.offset();
+    if (seed.hover(e.pageX - o.left, e.pageY - o.top)) hold = 0;
+});
+
+/* ================= ANIMATIONS ================= */
+
+var seedAnimate = eval(Jscex.compile("async", function () {
+    seed.draw();
+    while (hold) { $await(Jscex.Async.sleep(10)); }
+    while (seed.canScale()) { seed.scale(0.95); $await(Jscex.Async.sleep(10)); }
+    while (seed.canMove()) { seed.move(0,2); foot.draw(); $await(Jscex.Async.sleep(10)); }
+}));
+
+var growAnimate = eval(Jscex.compile("async", function () {
+    do { tree.grow(); $await(Jscex.Async.sleep(10)); }
+    while (tree.canGrow());
+}));
+
+var flowAnimate = eval(Jscex.compile("async", function () {
+    do { tree.flower(2); $await(Jscex.Async.sleep(10)); }
+    while (tree.canFlower());
+}));
+
+var moveAnimate = eval(Jscex.compile("async", function () {
+    tree.snapshot("p1",240,0,610,680);
+    while (tree.move("p1",500,0)) {
+        foot.draw();
+        $await(Jscex.Async.sleep(10));
+    }
+}));
+
+var textAnimate = eval(Jscex.compile("async", function () {
+    $("#code").show().typewriter();
+}));
+
+/* ================= IMAGES ================= */
+
+var main = document.getElementById("main");
+
+var images = [
+    "image1.jpeg","image2.jpeg","image3.jpeg",
+    "image4.jpeg","image5.jpeg","image6.jpeg",
+    "image7.jpeg","image8.jpeg","image9.jpeg",
+    "image10.jpeg","image11.jpeg","image12.jpeg",
+    "image13.jpeg","image14.jpeg","image15.jpeg",
+    "image16.jpeg","image17.jpeg","image18.jpeg",
+    "image19.jpeg","image20.jpeg","image21.jpeg"
+];
+
+var edgeImages = [];
+var anchors = [];
+
+var CENTER_X = 900;
+var CENTER_Y = 280;
+var RADIUS_X = 340;
+var RADIUS_Y = 280;
+var GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+
+images.forEach(function(_, i){
+    var r = Math.sqrt(i / images.length);
+    var angle = i * GOLDEN_ANGLE;
+    anchors.push({
+        x: CENTER_X + Math.cos(angle) * RADIUS_X * r,
+        y: CENTER_Y + Math.sin(angle) * RADIUS_Y * r
+    });
+});
+
+images.forEach(function(src){
+    var img = document.createElement("img");
+    img.src = src;
+    img.className = "edge-img";
+    main.appendChild(img);
+    edgeImages.push(img);
+});
+
+function popImages() {
+    edgeImages.forEach(function(img, i){
+        setTimeout(function(){
+            img.style.left = anchors[i].x + "px";
+            img.style.top  = anchors[i].y + "px";
+            img.style.opacity = 1;
+            img.style.transform = "scale(1)";
+        }, i * 2000);
+    });
+    setTimeout(launchConfetti, edgeImages.length * 2000 + 500);
+
+}
+
+function launchConfetti() {
+    var colors = ["#ff4d6d", "#ffd166", "#06d6a0", "#4cc9f0", "#b5179e"];
+    var pieces = 2000;
+
+    for (let i = 0; i < pieces; i++) {
+        let conf = document.createElement("div");
+        conf.className = "confetti";
+        conf.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+
+        // LEFT cannon
+        if (i < pieces / 2) {
+            conf.style.left = "20px";
+            conf.style.bottom = "20px";
+            conf.style.setProperty("--x", Math.random() * 500 + "px");
+            conf.style.setProperty("--y", -(Math.random() * 600 + 300) + "px");
+        }
+        // RIGHT cannon
+        else {
+            conf.style.right = "20px";
+            conf.style.bottom = "20px";
+            conf.style.setProperty("--x", -(Math.random() * 500 + 100) + "px");
+            conf.style.setProperty("--y", -(Math.random() * 600 + 300) + "px");
+        }
+
+        document.body.appendChild(conf);
+        setTimeout(() => conf.remove(), 4500);
+    }
+
+    // SHOW BIG TEXT AFTER CONFETTI STARTS
+    setTimeout(showBirthdayText, 800);
+}
+function showBirthdayText() {
+    var text = document.getElementById("birthdayText");
+    text.style.display = "block";
+    text.style.opacity = 1;
+
+    // Hide after 10 seconds
+    setTimeout(function() {
+        text.style.opacity = 0;      // fade out
+        text.style.transition = "opacity 1.5s ease";  // smooth fade
+    }, 10000);  // 10000ms = 10 seconds
+}
+
+
+
+
+/* ================= RUN ================= */
+
+var runAsync = eval(Jscex.compile("async", function () {
+    $await(seedAnimate());
+    $await(growAnimate());
+    $await(flowAnimate());
+    $await(moveAnimate());
+    textAnimate().start();
+    $await(Jscex.Async.sleep(1200));
+    document.getElementById("imgBtn").style.display = "block";
+}));
+
+runAsync().start();
+document.getElementById("imgBtn").onclick = popImages;
+
+})();
+</script>
+
+</body>
+</html>

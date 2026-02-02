@@ -1,84 +1,219 @@
+/* ===== Global Page Styling ===== */
 body {
   margin: 0;
   padding: 0;
-  background-color: #000; /* solid black background, images removed */
-  color: white;
+  overflow: hidden;
+
+  /* Light blue animated gradient background */
+  background: linear-gradient(135deg, #a1c4fd, #c2e9fb, #d4fcff);
+  background-size: 400% 400%;
+  animation: gradientBG 14s ease infinite;
+
+  color: #ffffff;
   font-size: 14px;
-  font-family: sans-serif;
-  overflow: auto;
+  font-family: "Segoe UI", sans-serif;
 }
+
 a {
-  color: white;
+  color: #eaf6ff;
   font-size: 14px;
+  text-decoration: none;
 }
+
+/* ===== Main Wrapper ===== */
 #main {
   width: 100%;
+  position: relative;
 }
+
+/* ===== Glass Card Effect ===== */
 #wrap {
   position: relative;
-  margin: 0 auto;
+  margin: 10px auto;
   width: 1100px;
   height: 680px;
-  margin-top: 10px;
+
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+
+  box-shadow: 0 0 45px rgba(173, 216, 230, 0.6);
 }
+
+/* ===== Text Area ===== */
 #text {
   width: 272px;
-  height: 560px;
-  left: 188px;
-  top: 80px;
+  height: 660px;
+  left: 100px;
+  top: 20px;
   position: absolute;
 }
+
+/* ===== Love Message ===== */
 #code {
   display: none;
-  color: rgb(196, 255, 255);
-  font-size: 16px;
+  color: #fcfcfc;
+  font-size: 18px;
   margin-top: 70px;
-  line-height: 25px;
-  font-size: larger;
-  font-weight: bolder;
+  line-height: 28px;
+  font-weight: bold;
+
+  text-shadow: 
+    0 0 8px rgba(173, 216, 230, 0.9),
+    0 0 15px rgba(135, 206, 250, 0.6);
 }
+
+/* ===== Clock ===== */
 #clock-box {
   position: absolute;
   left: 60px;
   top: 550px;
   font-size: 28px;
   display: none;
+  color: #eaf6ff;
 }
+
 #clock-box a {
   font-size: 28px;
   text-decoration: none;
 }
+
 #clock {
   margin-left: 48px;
 }
+
 #clock .digit {
   font-size: 64px;
 }
+
+/* ===== Canvas (Love Tree) ===== */
 #canvas {
   margin: 0 auto;
   width: 1100px;
   height: 680px;
+
+  border-radius: 14px;
+  box-shadow: 
+    0 0 30px rgba(173, 216, 230, 0.8),
+    0 0 60px rgba(135, 206, 250, 0.6);
 }
+
+/* ===== Error Message ===== */
 #error {
   margin: 0 auto;
   text-align: center;
   margin-top: 60px;
   display: none;
+  color: #ffffff;
 }
+
+/* ===== Cursor Hand ===== */
 .hand {
   cursor: pointer;
 }
+
+/* ===== Text Helpers ===== */
 .say {
   margin-left: 5px;
 }
+
 .space {
   margin-right: 150px;
 }
 
-#message-box{
+/* ===== Optional Message Box ===== */
+#message-box {
   position: absolute;
-  margin-top:450px;
+  margin-top: 450px;
   font-size: 25px;
   font-family: monospace;
+  color: #e6f7ff;
+}
 
+/* ===== Background Animation ===== */
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  } 
+}
+
+/* ===== Images on Tree ===== */
+.edge-img {
+  position: absolute;
+  width: 60px;
+  height: 100px;
+  opacity: 0;
+  transform: scale(0.3) rotate(-10deg);
+  pointer-events: none;
+  z-index: 9000;
+  border-radius: 10px;
+  transition: 
+    opacity 1.5s ease,
+    transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ===== CONFETTI PIECES ===== */
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 12px;
+    opacity: 0.9;
+    z-index: 20000;
+    animation: confettiFly 5s ease-out forwards;
+}
+
+@keyframes confettiFly {
+    0% {
+        transform: translate(0,0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y)) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* ===== BIG BIRTHDAY TEXT ===== */
+#birthdayText {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.3);
+    font-size: 100px;
+    font-weight: 900;
+    text-align: center;
+    background: linear-gradient(
+        45deg,
+        #ff4d6d,
+        #ffd166,
+        #06d6a0,
+        #4cc9f0,
+        #b5179e
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    z-index: 30000;
+    animation: birthdayPop 2s ease-out forwards;
+    animation-fill-mode: forwards; /* keeps text visible */
+}
+
+@keyframes birthdayPop {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.2);
+    }
+    60% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
